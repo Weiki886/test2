@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鸡兔同笼 · 趣味学习</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #f0f9ff, #e6f7ff);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 123, 255, 0.15);
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .title-box {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .main-title {
+            font-size: 26px;
+            color: #2d8cf0;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .sub-title {
+            font-size: 15px;
+            color: #666;
+        }
+
+        .question {
+            background: #f8f9fa;
+            border-left: 4px solid #722ed1;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #444;
+            font-weight: bold;
+            margin: 10px auto;
+            width: fit-content;
+        }
+
+        .cage-section {
+            flex: 1;
+            background: #f0f7ff;
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .animal-info {
+            font-size: 17px;
+            color: #333;
+            font-weight: bold;
+            background: white;
+            padding: 8px 18px;
+            border-radius: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .animal-info.up {
+            transform: scale(1.08);
+            color: #722ed1;
+        }
+
+        .animal-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            min-height: 180px;
+            align-content: center;
+        }
+
+        .animal {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: all 0.32s ease;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.4s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity:1; transform: translateY(0); }
+        }
+
+        .chicken {
+            background: #f7fafc;
+            border: 2px solid #90cdf4;
+        }
+
+        .rabbit {
+            background: #f0fff4;
+            border: 2px solid #68d391;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: #722ed1;
+            color: white;
+        }
+
+        .btn-reset {
+            background: #ff7d41;
+            color: white;
+        }
+
+        .btn-auto {
+            background: #00b96b;
+            color: white;
+        }
+
+        .btn:disabled {
+            background: #ccc !important;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+        }
+
+        .analysis-section {
+            flex: 1 1 320px;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            justify-content: space-between;
+        }
+
+        .card {
+            background: #fafbfc;
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid #2d8cf0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .card.highlight {
+            background: #e6f7ff;
+            border-left-color: #1890ff;
+            transform: scale(1.02);
+        }
+
+        .card h3 {
+            color: #2d8cf0;
+            margin-bottom: 8px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.5;
+            margin: 4px 0;
+        }
+
+        .formula {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #c53030;
+            font-weight: bold;
+            margin: 6px 0;
+        }
+
+        .step {
+            color: white;
+            background: #722ed1;
+            padding: 2px 8px;
+            border-radius: 50%;
+            font-size: 13px;
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 18px;
+            background: #e2e8f0;
+            border-radius: 9px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: #36cffc;
+            transition: width 0.6s ease;
+        }
+
+        @keyframes replaceAnim {
+            0% { transform: scale(1); opacity:0.8; }
+            50% { transform: scale(1.2); opacity:1; }
+            100% { transform: scale(1); }
+        }
+
+        .replace-animate {
+            animation: replaceAnim 0.5s ease;
+        }
+
+        .success-tip {
+            font-size: 18px;
+            color: #00b96b;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px 14px;
+            background: #f0fff4;
+            border-radius: 12px;
+            margin-top: 5px;
+            animation: successShow 0.6s ease;
+        }
+
+        @keyframes successShow {
+            0% { opacity:0; transform: scale(0.8) translateY(10px); }
+            60% { transform: scale(1.1); }
+            100% { opacity:1; transform: scale(1); }
+        }
+
+        .stars {
+            position:absolute;
+            width:100%;
+            height:100%;
+            pointer-events:none;
+        }
+        .star {
+            position:absolute;
+            color:#ffcf49;
+            font-size:18px;
+            animation: twinkle 0.8s ease infinite alternate;
+        }
+        @keyframes twinkle {
+            from { transform: scale(0.8); opacity:0.8; }
+            to { transform: scale(1.1); opacity:1; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+
+            .container {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .cage-section {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .main-title {
+                font-size: 20px;
+            }
+
+            .sub-title {
+                font-size: 13px;
+            }
+
+            .question {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+
+            .animal-info {
+                font-size: 15px;
+                padding: 6px 14px;
+            }
+
+            .animal {
+                width: 52px;
+                height: 52px;
+                font-size: 26px;
+            }
+
+            .btn-group {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .analysis-section {
+                max-width: 100%;
+                flex: 1 1 auto;
+            }
+
+            .card h3 {
+                font-size: 14px;
+            }
+
+            .card p,
+            .card .formula {
+                font-size: 14px;
+            }
+
+            .formula {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .animal {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+
+            .animal-box {
+                min-height: 140px;
+            }
+
+            .btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .main-title {
+                font-size: 18px;
+            }
+
+            .card {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="cage-section">
+        <div class="title-box">
+            <div class="main-title">🐔🐰 鸡兔同笼 · 趣味动画演示</div>
+            <div class="sub-title">用假设法轻松理解数学逻辑</div>
+            <div class="question">题目：笼子里有若干只鸡和兔。从上面数，有 8 个头；从下面数，有 26 只脚。鸡和兔各有几只？</div>
+        </div>
+
+        <div class="animal-info">
+            总头数：8 &nbsp;&nbsp;&nbsp; 当前总脚数：<span id="legNum">16</span>
+        </div>
+
+        <div class="animal-box" id="animalBox"></div>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" id="replaceBtn" onclick="replaceOne()">🔄 把1只鸡换成1只兔</button>
+            <button class="btn btn-reset" onclick="reset()">🔁 重置为全鸡</button>
+            <button class="btn btn-auto" onclick="autoDemo()">▶️ 自动演示</button>
+        </div>
+
+        <div id="successTip"></div>
+    </div>
+
+    <div class="analysis-section">
+        <div class="card" id="c1">
+            <h3><span class="step">1</span> 第一步：假设全是鸡</h3>
+            <p>每只鸡 2 只脚</p>
+            <div class="formula">8 × 2 = 16 只脚</div>
+            <p>比目标少：26 - 16 = <b>10 只脚</b></p>
+        </div>
+
+        <div class="card" id="c2">
+            <h3><span class="step">2</span> 第二步：每次替换增加脚数</h3>
+            <p>鸡 → 兔：脚数 +2</p>
+            <div class="formula">4 - 2 = 2 只/次</div>
+        </div>
+
+        <div class="card" id="c3">
+            <h3><span class="step">3</span> 第三步：计算需要换几只</h3>
+            <p>缺少的脚数 ÷ 每次增加量</p>
+            <div class="formula">10 ÷ 2 = <b id="result">0</b> 只兔子</div>
+        </div>
+
+        <div class="card">
+            <h3>📊 脚数进度（目标：26）</h3>
+            <div class="progress-bar">
+                <div class="progress" id="progress" style="width: 62%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let chickenCount = 8;
+    let rabbitCount = 0;
+    const totalLegs = 26;
+    let autoInterval = null;
+
+    function renderAnimals() {
+        const box = document.getElementById("animalBox");
+        box.innerHTML = "";
+
+        for (let i = 0; i < chickenCount; i++) {
+            box.innerHTML += `<div class="animal chicken">🐥</div>`;
+        }
+        for (let i = 0; i < rabbitCount; i++) {
+            box.innerHTML += `<div class="animal rabbit">🐇</div>`;
+        }
+
+        const legs = chickenCount * 2 + rabbitCount * 4;
+        const legSpan = document.getElementById("legNum");
+        legSpan.innerText = legs;
+        document.querySelector(".animal-info").classList.add("up");
+        setTimeout(()=>{
+            document.querySelector(".animal-info").classList.remove("up");
+        },300);
+
+        const per = (legs / totalLegs) * 100;
+        document.getElementById("progress").style.width = per + "%";
+        document.getElementById("result").innerText = rabbitCount;
+        document.getElementById("replaceBtn").disabled = chickenCount <= 0;
+
+        if (legs === totalLegs) {
+            document.getElementById("successTip").innerHTML = `<div class="success-tip">✅ 答案：鸡有 ${8 - rabbitCount} 只，兔有 ${rabbitCount} 只！</div>`;
+            createStars();
+        } else {
+            document.getElementById("successTip").innerHTML = "";
+        }
+    }
+
+    function highlightStep(n){
+        document.querySelectorAll(".card").forEach(c=>c.classList.remove("highlight"));
+        if(n===1) document.getElementById("c1").classList.add("highlight");
+        if(n===2) document.getElementById("c2").classList.add("highlight");
+        if(n===3) document.getElementById("c3").classList.add("highlight");
+    }
+
+    function replaceOne() {
+        if (chickenCount <= 0) return;
+        chickenCount--;
+        rabbitCount++;
+        renderAnimals();
+        highlightStep(rabbitCount >= 5 ? 3 : 2);
+
+        const items = document.querySelectorAll(".animal");
+        if (items[chickenCount]) {
+            items[chickenCount].classList.add("replace-animate");
+            setTimeout(() => {
+                items[chickenCount].classList.remove("replace-animate");
+            }, 500);
+        }
+    }
+
+    function reset() {
+        clearInterval(autoInterval);
+        chickenCount = 8;
+        rabbitCount = 0;
+        renderAnimals();
+        highlightStep(1);
+    }
+
+    function autoDemo() {
+        reset();
+        let count = 0;
+        autoInterval = setInterval(() => {
+            if (count < 5) {
+                replaceOne();
+                count++;
+            } else {
+                clearInterval(autoInterval);
+            }
+        }, 1300);
+    }
+
+    function createStars(){
+        for(let i=0;i<12;i++){
+            let s = document.createElement("div");
+            s.className = "star";
+            s.innerText = "⭐";
+            s.style.left = Math.random()*80 + 10 + "%";
+            s.style.top = Math.random()*50 + 20 + "%";
+            s.style.animationDelay = Math.random()*0.5 + "s";
+            document.body.appendChild(s);
+            setTimeout(()=>s.remove(),1800);
+        }
+    }
+
+    window.onload = () => { renderAnimals(); highlightStep(1); }
+</script>
+</body>
+</html>
